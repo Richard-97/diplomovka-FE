@@ -1,0 +1,33 @@
+@import './abstract/mixins';
+@import './abstract/variables';
+
+@import './base/base';
+
+//page
+@import './pages/logIn';
+@import './pages/registration';
+@import './pages/home';
+@import './pages/simpleController';
+@import './pages/settings';
+@import './pages/profile';
+
+//components
+@import './components/loginForm';
+@import './components/registrationForm';
+@import './components/input';
+@import './components/simpleButton';   
+@import './components/menu';
+@import './components/smartmodel';
+@import './components/sensoreCard';
+@import './components/sensoreTimeButton';
+@import './components/button';
+@import './components/controlCard';
+@import './components/modalWindow';
+@import './components/simplecard';
+@import './components/slider';
+@import './components/chatbox';
+@import './components/lastActionTable';
+@import './components/panel';
+@import './components//infoCard';
+@import './components/warningCard';
+@import './components/Loader';

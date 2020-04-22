@@ -1,0 +1,98 @@
+.home-bcg{
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(to right bottom, #a4481f, #823d1f, #61321e, #41271c, #211c1a);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: fixed;
+}
+
+.home-main{
+    width: 100%;
+    padding: 2rem 18rem 0 18rem;
+    &-title{
+        font-size: 5rem;
+        text-decoration: underline;
+        color: $color-dark-2;
+        b{
+            color: $color-font-1;
+        }
+    }
+    &-email{
+        font-size: 2rem;
+        margin-top: 0.5rem;
+        margin-bottom: 8rem;
+        color: $color-font-1;
+    }
+    &_lastActionsTable{
+        border-collapse: collapse;
+        width: 80%;
+        color: white;
+        box-shadow: $box-shadow;
+        -webkit-box-shadow: $box-shadow;
+        -moz-box-shadow: $box-shadow;
+        td, th {
+            border: .3rem solid $color-border;
+            text-align: center;
+            padding: 1rem;
+            font-size: 1.3rem;
+        }
+        tr:nth-child(even) {
+            background-color: $color-light-1;
+        }
+    }
+    &_defaults{
+        margin-bottom: 6rem;
+        padding: 1rem;
+        display: flex;
+        &-infos{
+            width: 40%;
+            list-style-type: none;
+            background-color: $color-light-1;
+            box-shadow: $box-shadow;
+            -webkit-box-shadow: $box-shadow;
+            -moz-box-shadow: $box-shadow;
+            li{
+                height: 6rem;
+                font-size: 2rem;
+                font-weight: 700;
+                padding: 0 3rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                p{
+                    color: $color-dark-2;
+                }
+            }
+        }
+        &-infos2{
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+            &__tempHum{
+                width: fit-content;
+                min-width: 31rem;
+                padding: 1.5rem 3rem;
+                background-color: $color-light-1;
+                box-shadow: $box-shadow;
+                -webkit-box-shadow: $box-shadow;
+                -moz-box-shadow: $box-shadow;
+                height: 45%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 10rem;
+                font-weight: 700;
+                color: $color-primary;
+            }
+            &_p{
+                font-size: 8rem;
+                padding-left: 3rem;
+            }
+        }
+    }
+}

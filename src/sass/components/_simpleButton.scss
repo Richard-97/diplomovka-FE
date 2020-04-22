@@ -1,0 +1,31 @@
+.simpleButton{
+    background-color: $color-primary;
+    box-shadow: 0 0 10px black;
+    border-radius: 5rem;
+    animation: buttonComes 2s ease-in-out 0s;
+    animation-iteration-count: 1;
+    p{
+        padding: 1rem 2rem;
+        font-size: 1.8rem;
+        color: $color-white;
+    }
+    &:hover{
+        background-color: $color-secondary;
+        color: $color-white;
+    }
+    &:active{
+        transform: translateY(.5rem);
+    }
+
+    @keyframes buttonComes {
+        0% {
+            transform: translateY(30rem)
+        }
+        80%{
+            transform: translateY(-2rem)
+        }
+        100%{
+            transform: translateY(0)
+        }
+      }
+}

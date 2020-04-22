@@ -1,0 +1,36 @@
+canvas{
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, #ffffff, #dcdcdc, #bbbbbb, #9a9a9a, #7b7b7b, #6b6b6b, #5b5b5b, #4b4b4b, #454545, #404040, #3a3a3a, #353535);
+}
+.smartmodel{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    &-controller{
+        height: 100%;
+        width: 20rem;
+        padding: 1rem 0;
+        background-color: rgba(0,0,0,.6);
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+}
+.model_loading{
+    width: 15rem;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p{
+        padding: 3rem 5rem;
+        font-size: 1.9rem;
+        background-color: $color-primary;
+        border-radius: 2rem;
+    }
+}

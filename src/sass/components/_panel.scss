@@ -1,0 +1,48 @@
+.panel{
+    height: 25rem;
+    width: 18rem;
+    background-color: rgba(255,255,255, .9);
+    margin-bottom: 3rem;
+    border-radius: 1rem;
+    transition: ease 1s;
+    animation: openPanel 1.5s;
+    .setup{
+        height: 90%;
+        .box{
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            p{
+                font-size: 2.5rem;
+                color: $color-secondary;
+            }
+        }
+    }
+    h1{
+        text-align: center;
+        margin-top: 2rem;
+    }
+    &-mic{
+        height: 7rem;
+        margin-top: 2rem;
+    }
+    &-recording{
+        height: 10rem;
+        width: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img{
+            height: 6rem;
+            width: auto;
+            cursor: pointer;
+        }
+    }
+}
+
+@keyframes openPanel{
+    0%{ opacity: 0; }
+    100%{ opacity: 1; }
+}

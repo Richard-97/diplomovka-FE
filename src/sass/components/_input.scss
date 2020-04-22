@@ -1,0 +1,48 @@
+.input{
+    height: 4rem;
+    width: 30rem;
+    animation: inputComes 2s ease-in-out 0s;
+    background-color: transparent;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: $color-primary;
+    border: none;
+    outline: none;
+    padding-left: 1rem;
+    border-bottom: .3rem solid $color-primary;
+    &:focus{
+        position: relative;
+        border-bottom: .3rem solid $color-secondary;
+    }
+    &:not(last-child){
+        margin-bottom: 2rem;
+    }
+    &-label{
+        font-size: 2rem;
+        padding-left: 1rem;
+        transition: .5s;
+    }
+    &:focus ~ label {
+        transform: translateY(-5rem);
+        font-size: 1rem;
+    }
+    &-text{
+        font-size: 1.7rem;
+        margin-left: 1rem;
+        margin-bottom: .3rem;
+        color: $color-white;
+        animation: inputComes 2s ease-in-out 0s;
+    }
+
+    @keyframes inputComes {
+        0%{
+            transform: translateX(30rem)
+        }
+        80%{
+            transform: translateX(-2rem)
+        }
+        100%{
+            transform: translateX(0)
+        }
+    }
+}

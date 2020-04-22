@@ -1,0 +1,66 @@
+.loginForm {
+    height: 50rem;
+    width: 110rem;
+
+    display: flex;
+    &-image{
+        height: 100%;
+        width: 60%;
+        background:  linear-gradient(0deg,rgba(255,255,255,0),rgba(255,255,255,0)), url(../img/smart-house-7.png) ; 
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    &-field{
+        height: 60rem;
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgba(0,0,0, .7);
+        transform: translateY(-5rem);
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        overflow: hidden;
+        h6{
+            font-size: 5rem;
+            font-weight: 400;
+            color: $color-white;
+            margin-top: 2rem;
+            animation: titleComes 2s ease-in-out 0s;
+            margin-bottom: 2.5rem;
+        }
+        &_p{
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            margin-top: 1.5rem;
+            color: $color-white;
+            animation: registration 2s ease-in-out;
+
+            strong{
+                color: $color-primary;
+                cursor: pointer;
+            }
+        }
+        @keyframes registration {
+            0%{
+                transform: translateY(30rem)
+            }
+            80%{
+                transform: translateY(-2rem)
+            } 
+            100%{
+                transform: translateY(0)
+            }
+        }
+        @keyframes titleComes {
+            0%{
+                transform: translateY(-30rem)
+            }
+            80%{
+                transform: translateY(2rem)
+            }
+            100%{
+                transform: translateY(0)
+            }
+        }
+    }
+}

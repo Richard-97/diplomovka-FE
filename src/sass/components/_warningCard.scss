@@ -1,0 +1,13 @@
+.warningcard{
+    height: 11rem;
+    width: 18rem;
+    background-color: $color-light-1;
+    box-shadow: $box-shadow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{
+        height: 7rem;
+        width: auto;
+    }
+}

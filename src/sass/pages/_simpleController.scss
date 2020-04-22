@@ -1,0 +1,35 @@
+.simplecontoller{
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(to right bottom, #a4481f, #823d1f, #61321e, #41271c, #211c1a);
+    padding-top: 1.5rem;
+    position: absolute;
+    &-sensorField{
+        height: fit-content;
+        width: 100%;  
+        display: flex;
+        flex-wrap: wrap; 
+        justify-content: flex-start; 
+    }
+    &-controlField{
+        height: fit-content;
+        width: 100%; 
+        display: flex;
+        flex-wrap: wrap; 
+        justify-content: flex-start; 
+    }
+    &-others{
+        height: fit-content;
+        width: 100%; 
+        display: flex;
+        flex-wrap: wrap; 
+        justify-content: flex-start; 
+    }
+    &-infoField{
+        height: fit-content;
+        width: 100%; 
+        display: flex;
+        flex-wrap: wrap; 
+        justify-content: flex-start; 
+    }
+}
