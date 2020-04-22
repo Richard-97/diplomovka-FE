@@ -8,20 +8,17 @@
 
 html {
     font-size: 62.5%; //1 rem = 10px
-    @include respond(tab-land) { 
-        font-size: 60%; //1 rem = 9px, 9/16
-    }
-    @include respond(tab-port) { 
-        font-size: 60%; //1 rem = 8px, 8/16
+    @include respond(small-phone) { 
+        font-size: 80%; //1 rem = 9px, 9/16
     }
     @include respond(phone) { 
-        font-size: 50%; //1 rem = 7px, 7/16
+        font-size: 75%; //1 rem = 8px, 8/16
     }
-    @include respond(small-phone) { 
-        font-size: 55%; //1 rem = 7px, 7/16
+    @include respond(tab-port) { 
+        font-size: 72%; //1 rem = 7px, 7/16
     }
-    @include respond(smaller-phone) { 
-        font-size: 62%; //1 rem = 7px, 7/16
+    @include respond(tab-land) { 
+        font-size: 70%; //1 rem = 7px, 7/16
     }
     @include respond(big-desktop) {
         font-size: 75%; //1rem = 12, 12/16
@@ -31,9 +28,6 @@ html {
     }
     @include respond(4kDisplay) {
         font-size: 160%; //1rem = 23px, 23/16
-    }
-    @include respond(biggest-desktop) {
-        font-size: 200%; //1rem = 20px, 20/16
     }
 }
 
@@ -47,6 +41,7 @@ body {
 .container{
     min-height: 100vh;
     width: 100%;
+    overflow: scroll;
 }
 .link{
     text-decoration: none;

@@ -2,7 +2,16 @@
     height: 50rem;
     width: 110rem;
     display: flex;
-
+    @include respond(tab-land) {
+        width: 78rem;
+    }
+    @include respond(tab-port) {
+        justify-content: center;
+    }
+    @include respond(small-phone) {
+        height: 100%;
+        align-items: center;
+    }
     &-field{
         width: 55%;
         height: 60rem;
@@ -12,6 +21,25 @@
         flex-direction: column;
         align-items: center;
         overflow: hidden;
+        @include respond(tab-land) {
+            transform: translateY(-7rem);
+            width: 50%;
+        }
+        @include respond(tab-port) {
+            width: 65%;
+        }
+        @include respond(phone) {
+            width: 95%;
+            height: fit-content;
+            padding-bottom: 2rem;
+        }
+        @include respond(small-phone) {
+            width: 100%;
+            height: 100%;
+            padding-bottom: 2rem;
+            transform: translateY(0);
+            justify-content: space-around;
+        }
         h6{
             font-size: 5rem;
             font-weight: 400;
@@ -33,5 +61,12 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-position: 48% 50%;
+        @include respond(tab-land) {
+            height: 90%;
+            width: 50%;
+        }
+        @include respond(tab-port) {
+            display: none;
+        }
     }
 }

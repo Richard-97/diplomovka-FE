@@ -9,6 +9,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    @include respond(tab-land) {
+        right: 0rem;
+        bottom: 2rem;
+        min-width: 20rem;
+    }
+    @include respond(tab-port) {
+        right: 0rem;
+        bottom: 2rem;
+        min-width: 10rem;
+        align-items: flex-end;
+    }
     &-btn{
         height: 8rem;
         width: 8rem;
@@ -19,9 +30,18 @@
         
         box-shadow: $box-shadow;
         cursor: pointer;
+        @include respond(tab-port) {
+            width: 2.5rem;
+            border-top-left-radius: 1.3rem;
+            border-bottom-left-radius: 1.3rem;
+        }
         img{
             height: 5rem;
             width: auto;
+            @include respond(tab-port) {
+                display: none;
+                content: "\f095";
+            }
         }
         &:hover{
             transition: ease 1s;

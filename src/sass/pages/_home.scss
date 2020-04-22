@@ -7,15 +7,32 @@
     justify-content: flex-start;
     align-items: center;
     position: fixed;
+    overflow: scroll;
 }
 
 .home-main{
     width: 100%;
     padding: 2rem 18rem 0 18rem;
+    @include respond(tab-land) {
+        padding: 2rem 7rem 0 7rem;
+    }
+    @include respond(tab-port) {
+        padding: 2rem 3rem 0 3rem;
+    }
+    @include respond(phone) {
+        padding: 2rem 1rem 0 1rem;
+    }
+    @include respond(small-phone) {
+        padding: 2rem 0rem 0 0rem;
+    }
+    
     &-title{
         font-size: 5rem;
         text-decoration: underline;
         color: $color-dark-2;
+        @include respond(small-phone) {
+            font-size: 3rem;
+        }
         b{
             color: $color-font-1;
         }
@@ -25,6 +42,10 @@
         margin-top: 0.5rem;
         margin-bottom: 8rem;
         color: $color-font-1;
+        @include respond(tab-land) {
+            margin-bottom: 4rem;
+        }
+        
     }
     &_lastActionsTable{
         border-collapse: collapse;
@@ -33,11 +54,23 @@
         box-shadow: $box-shadow;
         -webkit-box-shadow: $box-shadow;
         -moz-box-shadow: $box-shadow;
+        @include respond(tab-port) {
+            width: 90%;
+        }
         td, th {
             border: .3rem solid $color-border;
             text-align: center;
             padding: 1rem;
             font-size: 1.3rem;
+            @include respond(phone) {
+                width: 90%;
+                padding: .1 .7rem;
+            }
+            @include respond(small-phone) {
+                width: 90%;
+                padding: .1rem .2rem;
+                font-size: 1rem;
+            }
         }
         tr:nth-child(even) {
             background-color: $color-light-1;
@@ -47,6 +80,19 @@
         margin-bottom: 6rem;
         padding: 1rem;
         display: flex;
+        @include respond(tab-land) {
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        @include respond(tab-port) {
+            flex-direction: column;
+            &-infos2{
+                order: 1;
+            }
+            &-infos{
+                order: 2;
+            }
+        }
         &-infos{
             width: 40%;
             list-style-type: none;
@@ -54,6 +100,12 @@
             box-shadow: $box-shadow;
             -webkit-box-shadow: $box-shadow;
             -moz-box-shadow: $box-shadow;
+            @include respond(tab-land) {
+                width: 49%;
+            }
+            @include respond(tab-port) {
+                width: 100%;
+            }
             li{
                 height: 6rem;
                 font-size: 2rem;
@@ -73,6 +125,16 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: flex-end;
+            @include respond(tab-port) {
+                width: 100%;
+                flex-direction: row;
+                margin-bottom: 2.5rem;
+            }
+            @include respond(phone) {
+                width: 100%;
+                flex-direction: column;
+                margin-bottom: 0;
+            }
             &__tempHum{
                 width: fit-content;
                 min-width: 31rem;
@@ -88,6 +150,13 @@
                 font-size: 10rem;
                 font-weight: 700;
                 color: $color-primary;
+                @include respond(tab-port) {
+                    min-width: 45%;
+                }
+                @include respond(phone) {
+                    min-width: 100%;
+                    margin-bottom: 2rem;
+                }
             }
             &_p{
                 font-size: 8rem;

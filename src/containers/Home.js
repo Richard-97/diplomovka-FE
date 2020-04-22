@@ -91,7 +91,9 @@ export default function Home() {
                     </div>
                   </div>
               </div>
-              <LastActionsTable />   
+              <div className="lastActionTable-center">
+                <LastActionsTable />   
+              </div>
             </div>
           <ChatBox
             icon={chat_icon}

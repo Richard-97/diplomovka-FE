@@ -2,6 +2,13 @@
     margin-bottom: 6rem;
     padding: 1rem;
     display: flex;
+    
+    &-center{
+        @include respond(tab-port) {
+           display: flex;
+           justify-content: center;
+        }
+    }
     &-infos{
         width: 40%;
         list-style-type: none;
