@@ -20,7 +20,7 @@ const App = () => {
     const [lastName, setLastName] = useState('Rusňák');
     const [email, setEmail] = useState('richard.rusnak@student.tuke.sk');
 
-    const api = 'http://localhost:5000';
+    const api = 'https://diplomovka-be.herokuapp.com/';
     return (
       <UserContext.Provider value={{
         userID,
