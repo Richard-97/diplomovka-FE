@@ -4,13 +4,12 @@ import ChatBox from '../components/Chatbox/Chatbox';
 import LastActionsTable from '../components/LastActionsTable/LastActionsTable';
 import chat_icon from '../img/icons/chat.svg';
 import socketIOClient from 'socket.io-client';
-import { FLASK_URL } from '../utils/config';
 import { ruleBaseSystemBehavior } from '../utils/expertalSystem';
 
 import UserContext from '../Context';
 import Loader from '../components/Loader/Loader';
 
-export default function Home() {
+export default function Home({ api }) {
 
   const [rpiData, setRpiData] = useState({});
   const [actions, setActions] = useState({});
@@ -19,7 +18,7 @@ export default function Home() {
   const [connected, setConnected] = useState(undefined);
 
     useEffect(() => {
-        const socket = socketIOClient(FLASK_URL, {});
+        const socket = socketIOClient(api, {});
         setSocket(socket);
         socket.on('connect', data => {
           socket.emit('join', 'Server Connected to Client.');

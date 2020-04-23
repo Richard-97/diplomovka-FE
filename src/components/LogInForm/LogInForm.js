@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter, Link } from "react-router-dom";
 import Input from '../Input/Input';
 import Button from '../Button/Button';
@@ -6,7 +6,7 @@ import Button from '../Button/Button';
 const LogInForm = ({ api, history }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
 
     const onEmailChangeHandler = (event) => {
         setEmail(event.target.value)
@@ -14,24 +14,27 @@ const LogInForm = ({ api, history }) => {
     const onPasswordChangeHandler = (event) => {
         setPassword(event.target.value)
     }
-    const onSubmitButton = async () => {
-        try{
-            const resp = await fetch(`${api}/logIn`,{
-                method: 'post',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    email,
-                    password
-                })
+    const onSubmitButton = () => {
+        const resp = fetch(`${api}/logIn`,{
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                email,
+                password
             })
-            const data = await resp.json()
-            data.response === 'success' ? history.push("/domov") : setError(true);
-        }
-        catch(event){
-            setError(true);
-        }
-
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.response === 'success') history.push("/domov")
+            else if(data.response === 'bad password') setError('Nesprávne heslo')
+            else setError('Chyba pri prihlásení')
+        });
     }
+    useEffect(() => {
+        if(error === 'Nesprávne heslo'){
+            setError('');
+        }
+    }, [password])
     return (
         <div className = 'loginForm'>
             <div className = 'loginForm-image'>   
@@ -45,7 +48,7 @@ const LogInForm = ({ api, history }) => {
                     <p className = 'loginForm-field_p'>Nemate účet? <strong>Zaregistrujte sa!</strong> </p>
                 </Link>
                 <Button text = 'Prihlásiť' onClick = {()=>onSubmitButton()} />
-                {error && <p className = 'loginForm-field_p'>Chybné prihlasovacie údaje.</p>}
+                {error !== '' && <p className = 'loginForm-field_p'>{error}</p>}
             </div>
         </div>
     )

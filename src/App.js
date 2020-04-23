@@ -21,6 +21,7 @@ const App = () => {
     const [email, setEmail] = useState('richard.rusnak@student.tuke.sk');
 
     const api = 'https://diplomovka-be.herokuapp.com/';
+    
     return (
       <UserContext.Provider value={{
         userID,
