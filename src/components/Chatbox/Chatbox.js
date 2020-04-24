@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
 import Panel from './Panel';
 import { generateAnswer } from './Answers';
-import { FLASK_URL } from '../../utils/config';
 
-export default function Chatbox({icon, data, actions, socket}) {
+export default function Chatbox({icon, data, actions, socket, api, nodejsApi}) {
 
     const [open, setOpen] = useState(false);
     const [url, setUrl] = useState(undefined);
     const [answer, setAnswer] = useState('');
 
     useEffect(() => {
-        fetch(`${FLASK_URL}/text_to_speech`,{
+        fetch(`${api}/text_to_speech`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -28,7 +27,7 @@ export default function Chatbox({icon, data, actions, socket}) {
     
     useEffect(() => {
         console.log('aswer', answer)
-        fetch(`${FLASK_URL}/text_to_speech`,{
+        fetch(`${api}/text_to_speech`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +53,7 @@ export default function Chatbox({icon, data, actions, socket}) {
     }
     return (
         <div className='chatbox'>
-            { open && <Panel url={url} onChange={(ans) => setAnswer(ans)} clearUrl={clearUrl} /> }
+            { open && <Panel url={url} onChange={(ans) => setAnswer(ans)} clearUrl={clearUrl} api={nodejsApi} /> }
             <div className='chatbox-btn' onClick={openPanelHandler}>
                 <img src={icon} alt='chat_icon'/>
             </div>

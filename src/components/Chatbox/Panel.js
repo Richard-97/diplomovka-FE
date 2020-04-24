@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TextToSpeech from '../TextToSpeech/TextToSpeech';
 import Mic from './Mic';
 
-export default function Panel({ url, onChange, clearUrl }) {
+export default function Panel({ url, onChange, clearUrl, api }) {
 
     return (
         <div className='panel'>
@@ -10,7 +10,7 @@ export default function Panel({ url, onChange, clearUrl }) {
             {
                 url !== undefined && <TextToSpeech url={url} clearUrl={clearUrl} autoPlay/>
             }
-            <Mic onChange={onChange} />
+            <Mic onChange={onChange} api={api} />
         </div>
     )
 }

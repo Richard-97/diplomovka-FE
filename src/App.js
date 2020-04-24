@@ -21,6 +21,7 @@ const App = () => {
     const [email, setEmail] = useState('richard.rusnak@student.tuke.sk');
 
     const api = 'https://diplomovka-be.herokuapp.com/';
+    const nodejsApi = 'https://nodejs-be.herokuapp.com/';
     
     return (
       <UserContext.Provider value={{
@@ -36,7 +37,7 @@ const App = () => {
           { (window.location.pathname !== '/' && window.location.pathname !== '/registracia') && <Menu />}
           <Route exact path='/' component={()=><LogIn api={api}/>} />
           <Route path='/registracia' component={()=><Registration api={api}/>} />
-          <Route path='/domov' component={()=><Home api={api} />} />
+          <Route path='/domov' component={()=><Home api={api} nodejsApi={nodejsApi} />} />
           <Route path='/modelpriestoru' component={SmartModel} />
           <Route path='/jednoducheovladanie' component={()=><SimpleController user_id={userID}/>}  />
           <Route path='/nastavenia' component={Settings} />

@@ -48,7 +48,7 @@ class App extends React.Component{
 
   connect = () => {
     //const socket = socketIOClient('https://test-node-is.azurewebsites.net', {});
-    const socket = socketIOClient('http://localhost:3000', {});
+    const socket = socketIOClient(this.props.api, {});
     this.setState({ socket });
     socket.on('connect', function(data) {
       socket.emit('join', 'Server Connected to Client');

@@ -27,9 +27,15 @@ const LogInForm = ({ api, history }) => {
         .then(data => {
             if(data.response === 'success') history.push("/domov")
             else if(data.response === 'bad password') setError('Nesprávne heslo')
+            else if(data.response === 'user doesnt exist') setError('Uživateľ neexistuje')
             else setError('Chyba pri prihlásení')
         });
     }
+    useEffect(() => {
+        if(error === 'Uživateľ neexistuje'){
+            setError('');
+        }
+    }, email)
     useEffect(() => {
         if(error === 'Nesprávne heslo'){
             setError('');

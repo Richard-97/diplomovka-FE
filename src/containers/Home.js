@@ -9,7 +9,7 @@ import { ruleBaseSystemBehavior } from '../utils/expertalSystem';
 import UserContext from '../Context';
 import Loader from '../components/Loader/Loader';
 
-export default function Home({ api }) {
+export default function Home({ api, nodejsApi }) {
 
   const [rpiData, setRpiData] = useState({});
   const [actions, setActions] = useState({});
@@ -99,6 +99,8 @@ export default function Home({ api }) {
             data={rpiData}
             actions={actions}
             socket={socket}
+            api={api}
+            nodejsApi={nodejsApi}
           />
           </div>
           )
