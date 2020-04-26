@@ -6,6 +6,12 @@
     border-radius: 1rem;
     transition: ease 1s;
     animation: openPanel 1.5s;
+    &-error{
+        color: red;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
     .setup{
         height: 90%;
         .box{

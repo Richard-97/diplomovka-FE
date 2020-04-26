@@ -34,7 +34,7 @@ body {
 .container {
   min-height: 100vh;
   width: 100%;
-  overflow: scroll; }
+  overflow: auto; }
 
 .link {
   text-decoration: none; }
@@ -64,7 +64,7 @@ body {
   justify-content: flex-start;
   align-items: center;
   position: fixed;
-  overflow: scroll; }
+  overflow: auto; }
 
 .home-main {
   width: 100%;
@@ -907,6 +907,11 @@ canvas {
   border-radius: 1rem;
   transition: ease 1s;
   animation: openPanel 1.5s; }
+  .panel-error {
+    color: red;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold; }
   .panel .setup {
     height: 90%; }
     .panel .setup .box {
@@ -979,6 +984,17 @@ canvas {
   width: 4rem;
   height: 4rem;
   animation: spin 2s linear infinite; }
+  .loader-message {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-top: 3rem; }
 
 @keyframes spin {
   0% {

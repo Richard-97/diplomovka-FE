@@ -1,13 +1,34 @@
-import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import App from './App';
+import auth from './utils/auth';
 
-
+//const api = 'http://localhost:5000'
+const api = 'https://diplomovka-be.herokuapp.com/'
+const nodejsApi = 'https://nodejs-be.herokuapp.com';
 
 const RouterComponent = () => {
+    const [render, setRender] = useState(false);
+
+    useEffect(() => {
+        auth.check(`${api}/user/auth`, localStorage.getItem('token'), () => {
+            setRender(true);
+        }, (err) => {
+            setRender(true);
+        })
+    }, []);
+
+    const clearAuthentificated = () => {
+        auth.logout(() => {
+            localStorage.clear();
+        });
+    }
+
     return(  
             <Router>
-                <App />
+                <Switch>
+                    {render && <App api={api} nodejsApi={nodejsApi}  clearAuth={ clearAuthentificated } />}
+                </Switch>
             </Router>
     );
 }

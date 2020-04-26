@@ -5,6 +5,18 @@
     width: 4rem;
     height: 4rem;
     animation: spin 2s linear infinite;
+    &-message{
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+      margin-top: 3rem;
+    }
   }
   
   @keyframes spin {

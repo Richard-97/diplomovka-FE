@@ -9,10 +9,11 @@ import { ruleBaseSystemBehavior } from '../utils/expertalSystem';
 import UserContext from '../Context';
 import Loader from '../components/Loader/Loader';
 
-export default function Home({ api, nodejsApi }) {
+export default function Home({ api, nodejsApi, user }) {
 
   const [rpiData, setRpiData] = useState({});
   const [actions, setActions] = useState({});
+  const [tableData, setTableData] = useState([]);
   const [expertal, setExpertal] = useState({});
   const [socket, setSocket] = useState(null);
   const [connected, setConnected] = useState(undefined);
@@ -29,16 +30,17 @@ export default function Home({ api, nodejsApi }) {
         socket.emit('update_sensors_start');
 
         socket.on('expertal_system', data => {
-          console.log('Expertny', data)
           setExpertal(data);
         })
         socket.on('update_sensors', data=>{
-          console.log('RPI', data)
             setRpiData(data);
         })
         socket.on('update_actions', data=>{
           setActions(data);
-      })
+        })
+        socket.on('update_table_data', data=>{
+          setTableData(data);
+        })
 
         const interval2 = setInterval(() => {
           socket.emit('update_sensors_grovepi_interval');
@@ -47,6 +49,7 @@ export default function Home({ api, nodejsApi }) {
         const interval = setInterval(() => {
             socket.emit('expertal_system');
         }, 15000);
+
         return () => {
         clearInterval(interval);
         clearInterval(interval2);
@@ -57,16 +60,16 @@ export default function Home({ api, nodejsApi }) {
       ruleBaseSystemBehavior(expertal, socket);
     }, [expertal]);
 
-    return (
-      <UserContext.Consumer>
-        {
-          ({firstName, lastName, email}) => (
+    return(
             <div className = 'home-bcg'>
-              <div className = 'home-main'>
-                <p className='home-main-title'>Vitajte <b>{`${firstName} ${lastName}`}</b></p>
-                <p className='home-main-email'>{email}</p>
+              {
+                connected ?
+                  <>
+                    <div className = 'home-main'>
+                <p className='home-main-title'>Vitajte <b>{`${user.surname} ${user.lastname}`}</b></p>
+                <p className='home-main-email'>{user.email}</p>
                 <div className='home-main_defaults'>
-                  <HomeDefaults data={rpiData} actions={actions} socket={socket} />
+                  <HomeDefaults data={rpiData} actions={actions} socket={socket} api={api} userID={user.id} />
                   <div className='home-main_defaults-infos2'>
                     <div className='home-main_defaults-infos2__tempHum'>
                       {
@@ -91,7 +94,7 @@ export default function Home({ api, nodejsApi }) {
                   </div>
               </div>
               <div className="lastActionTable-center">
-                <LastActionsTable />   
+                <LastActionsTable data={tableData} />   
               </div>
             </div>
           <ChatBox
@@ -102,9 +105,11 @@ export default function Home({ api, nodejsApi }) {
             api={api}
             nodejsApi={nodejsApi}
           />
+                  </>
+                  : <Loader />
+              }
+              
           </div>
-          )
-        }
-      </UserContext.Consumer>
+        
     )
 }

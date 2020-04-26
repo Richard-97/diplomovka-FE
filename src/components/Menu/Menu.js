@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom'; 
+import auth from '../../utils/auth';
+import { withRouter } from 'react-router-dom';
 
-export default function Menu() {
+function Menu({ clearAuth }) {
     const [active, setActive] = useState(false)
+
     return(
         <div className='menu-container'>
             <div className={active?'menu_btn_toggle active':'menu_btn_toggle'} onClick={()=>setActive(!active)}></div>
@@ -25,10 +28,12 @@ export default function Menu() {
                         <Link to='/nastavenia'>Nastavenia</Link>
                     </li>
                     <li>
-                        <Link to='/'>Odhlasiť</Link>
+                        <Link to='/' onClick={ clearAuth }>Odhlasiť</Link>
                     </li>
                 </ul>
             </div>
         </div>
     )
 }
+
+export default withRouter(Menu);

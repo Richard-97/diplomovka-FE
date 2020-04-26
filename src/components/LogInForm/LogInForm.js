@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Input from '../Input/Input';
 import Button from '../Button/Button';
+import { encode } from 'base-64';
 
-const LogInForm = ({ api, history }) => {
+const LogInForm = ({ api }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -15,17 +16,19 @@ const LogInForm = ({ api, history }) => {
         setPassword(event.target.value)
     }
     const onSubmitButton = () => {
-        const resp = fetch(`${api}/logIn`,{
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                email,
-                password
-            })
+        fetch(`${api}/logIn`,{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + encode(email + ":" + password)
+            },
         })
         .then(res => res.json())
         .then(data => {
-            if(data.response === 'success') history.push("/domov")
+            console.log(data)
+            if(data.token){
+                localStorage.setItem('token', data.token);
+                window.location.href = '/domov';
+            }
             else if(data.response === 'bad password') setError('Nesprávne heslo')
             else if(data.response === 'user doesnt exist') setError('Uživateľ neexistuje')
             else setError('Chyba pri prihlásení')
@@ -35,7 +38,7 @@ const LogInForm = ({ api, history }) => {
         if(error === 'Uživateľ neexistuje'){
             setError('');
         }
-    }, email)
+    }, [email])
     useEffect(() => {
         if(error === 'Nesprávne heslo'){
             setError('');
@@ -53,11 +56,12 @@ const LogInForm = ({ api, history }) => {
                 <Link to = 'registracia' className = 'link'>
                     <p className = 'loginForm-field_p'>Nemate účet? <strong>Zaregistrujte sa!</strong> </p>
                 </Link>
-                <Button text = 'Prihlásiť' onClick = {()=>onSubmitButton()} />
+                
+                <Button text = 'Prihlásiť' onClick = { onSubmitButton } />
                 {error !== '' && <p className = 'loginForm-field_p'>{error}</p>}
             </div>
         </div>
     )
 }
 
-export default withRouter(LogInForm);
+export default LogInForm;

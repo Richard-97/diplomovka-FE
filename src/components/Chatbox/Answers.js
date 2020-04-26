@@ -1,6 +1,7 @@
 export const generateAnswer = (gnamaker_response, rpiData, actions, socket) => {
     console.log('rpi data', rpiData)
     if(rpiData === undefined || rpiData === []) return 'Dáta nie sú k dispozícií. Opýtaj sa ešte raz prosím.'
+    if(gnamaker_response.error !== undefined) return '';
     if(gnamaker_response === '') return '';
     console.log('AAAAA', gnamaker_response.answers[0].answer)
     switch(gnamaker_response.answers[0].answer){

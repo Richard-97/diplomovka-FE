@@ -5,6 +5,7 @@ import ControlCard from '../components/ControlCard/ControlCard';
 import SimpleCard from '../components/SimpleCard/SimpleCard';
 import InfoCard from '../components/InfoCard/InfoCard';
 import ChatBox from '../components/Chatbox/Chatbox';
+import Loader from '../components/Loader/Loader';
 
 import chat_icon from '../img/icons/chat.svg';
 import light_on from '../img/icons/light_on.svg';
@@ -18,9 +19,12 @@ import smart_mode_on from '../img/icons/smart_mode_on.svg';
 import smart_mode_off from '../img/icons/smart_mode_off.svg';
 import InputSlider from '../components/InputSlider/InputSlider';
 
-import { FLASK_URL } from '../utils/config';
+import { 
+    potenciometerDataProcess, 
+    updateLastActionTable 
+} from '../utils/config';
 
-export default function SimpleController({ userID }) {
+export default function SimpleController({ user, api, nodejsApi }) {
 
     const [connected, setConnected] = useState(false);
     const [socket, setSocket] = useState(null);
@@ -34,13 +38,12 @@ export default function SimpleController({ userID }) {
     const [door, setDoor] = useState(false);
     const [window1, setWindow1] = useState(false);
     const [window2, setWindow2] = useState(false);
-    const [blinds, setBlinds] = useState(5);
     const [gas, setGas] = useState(false);
     const [fire, setFire] = useState(false);
     const [smartMode, setSmartMode] = useState(false);
 
     useEffect(()=>{
-        const socket = socketIOClient('http://localhost:5000', {});
+        const socket = socketIOClient(api, {});
         setSocket(socket);
         socket.on('connect', data => {
             socket.emit('join', 'Server Connected to Client.');
@@ -103,62 +106,68 @@ export default function SimpleController({ userID }) {
     useEffect(()=>{
         if(socket !== null){
             socket.emit('update_sensors', {bool: window2, id: '5'})
-            updateLastActionTable(userID, '1', 'test', new Date())
+            updateLastActionTable(api, user.id, `${window2 ? 'Otvorenie okna': 'Zatvorenie okna'}`, new Date())
         }
     }, [window2])
+    useEffect(() => {
+        if(socket !== null){
+            socket.emit('update_sensors', {bool: smartMode, id: '9'})
+        }
+    }, [smartMode]);
 
-    const updateLastActionTable = (userID, sensorID, action, time) => {
-        fetch('http://localhost:5001/updateLastActionTable', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                userID, sensorID, action, time
-            })
-        })
-    }
     return (
-            <div className = 'simplecontoller'>
-                <div className='simplecontoller-sensorField'>
-                    <SensorCard 
-                        title='Vlhkosť'
-                        value={humidity}
-                        unit="%"
-                        hint='Najpríjemnejšia vlhkosť vzduchu pre človeka je 50-60 %.'
+            connected ?
+                <div className = 'simplecontoller'>
+                    <div className='simplecontoller-sensorField'>
+                        <SensorCard 
+                            title='Vlhkosť'
+                            value={humidity}
+                            unit="%"
+                            hint='Najpríjemnejšia vlhkosť vzduchu pre človeka je 50-60 %.'
+                        />
+                        <SensorCard 
+                            title='Teplota'
+                            value={temperature}
+                            unit="°C"
+                            hint='Najpríjemnejšia teplota v miestnosti pre človeka je 20-23 °C.'
+                        />
+                        
+                    </div>
+                    <div className='simplecontoller-controlField'>
+                        <ControlCard title='Hlavné svetlo' icon_on={light_on} icon_off={light_off} power={mainLight} onClick={()=>setMainLight(!mainLight)} />
+                        <ControlCard title='Klima' icon_on={clima_on} power={clima} onClick={()=>setClima(!clima)} />
+                        <ControlCard title='Dvere' icon_on={door_open} icon_off={door_close}  power={door} onClick={()=>setDoor(!door)} />
+                        <ControlCard title='Okno 1' icon_on={window_open} icon_off={window_close}  power={window1} onClick={()=>setWindow1(!window1)} />  
+                        <ControlCard title='Okno 2' icon_on={window_open} icon_off={window_close}  power={window2} onClick={()=>setWindow2(!window2)} />
+                        <ControlCard title='Rolety' >
+                            <InputSlider min={0} max={10} value={potenciometerDataProcess(rpiData.potenciometer)} height='.8rem' width='18rem' />
+                        </ControlCard>
+                        <ControlCard title='Smart mode' icon_on={smart_mode_on} icon_off={smart_mode_off}  power={smartMode} onClick={()=>setSmartMode(!smartMode)}/>
+                    </div>
+                    <div className='simplecontoller-infoField'> 
+                        <InfoCard title='Oheň' danger={fire} />
+                        <InfoCard title='Plyn' danger={gas} />
+                        <InfoCard title='Dážď' danger={false} />
+                    </div>
+                    <div className='simplecontoller-others'>
+                        <SimpleCard title='Kamera' type='camera'/>
+                        <SimpleCard title='Test senzorov' type='test' />
+                    </div>
+                    <ChatBox
+                        icon={chat_icon}
+                        data={rpiData}
+                        actions={actions}
+                        socket={socket}
+                        api={api}
+                        nodejsApi={nodejsApi}
                     />
-                    <SensorCard 
-                        title='Teplota'
-                        value={temperature}
-                        unit="°C"
-                        hint='Najpríjemnejšia teplota v miestnosti pre človeka je 20-23 °C.'
-                    />
-                    
                 </div>
-                <div className='simplecontoller-controlField'>
-                    <ControlCard title='Hlavné svetlo' icon_on={light_on} icon_off={light_off} power={mainLight} onClick={()=>setMainLight(!mainLight)} />
-                    <ControlCard title='Klima' icon_on={clima_on} power={clima} onClick={()=>setClima(!clima)} />
-                    <ControlCard title='Dvere' icon_on={door_open} icon_off={door_close}  power={door} onClick={()=>setDoor(!door)} />
-                    <ControlCard title='Okno 1' icon_on={window_open} icon_off={window_close}  power={window1} onClick={()=>setWindow1(!window1)} />  
-                    <ControlCard title='Okno 2' icon_on={window_open} icon_off={window_close}  power={window2} onClick={()=>setWindow2(!window2)} />
-                    <ControlCard title='Rolety' >
-                        <InputSlider min={0} max={10} value={blinds} height='.8rem' width='18rem' onLeft={()=>setBlinds(blinds-1)} onRight={()=>setBlinds(blinds+1)} />
-                    </ControlCard>
-                    <ControlCard title='Smart mode' icon_on={smart_mode_on} icon_off={smart_mode_off}  power={smartMode} onClick={()=>console.log('smart mode')}/>
+            :
+            <>
+                <div className = 'loader-message'>
+                    <Loader />
+                    <p>Prebieha pripojenie na server...</p>
                 </div>
-                <div className='simplecontoller-infoField'> 
-                    <InfoCard title='Oheň' danger={fire} />
-                    <InfoCard title='Plyn' danger={gas} />
-                    <InfoCard title='Dážď' danger={false} />
-                </div>
-                <div className='simplecontoller-others'>
-                    <SimpleCard title='Kamera' type='camera'/>
-                    <SimpleCard title='Test senzorov' type='test' />
-                </div>
-                <ChatBox
-                    icon={chat_icon}
-                    data={rpiData}
-                    actions={actions}
-                    socket={socket}
-                />
-            </div>
+            </>
     )
 }

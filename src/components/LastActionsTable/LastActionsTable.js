@@ -1,6 +1,16 @@
 import React from 'react'
 
-export default function LastActionsTable() {
+export default function LastActionsTable({data}) {
+    console.log('table data', data)
+    const renderTableData = (tableData = []) => (
+            tableData.map((tr, idx) => (
+                <tr key={idx}>
+                    <td>{tr.action}</td>
+                    <td>{tr.id}</td>
+                    <td>{tr.time}</td>
+                </tr>
+            ))
+    )
     return (
         <table className='home-main_lastActionsTable'>
             <thead>
@@ -11,26 +21,7 @@ export default function LastActionsTable() {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Otvorenie okna č. 1</td>
-                    <td>richard.rusnak@student.tuke.sk</td>
-                    <td>4.4.2020 14:32</td>
-                </tr>
-                <tr>
-                    <td>Zavretie okna č. 1</td>
-                    <td>richard.rusnak@student.tuke.sk</td>
-                    <td>4.4.2019 15:09</td>
-                </tr>
-                <tr>
-                    <td>Zapnutie klímy</td>
-                    <td>richard.rusnak@student.tuke.sk</td>
-                    <td>4.4.2020 15:12</td>
-                </tr>
-                <tr>
-                    <td>Vypnutie klímy</td>
-                    <td>test@test.com</td>
-                    <td>4.4.2020 15:50</td>
-                </tr>
+                {renderTableData(data)}
             </tbody>
         </table>
     )

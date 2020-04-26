@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Model from '../components/Model/Model';
 
-export default SmartModel => {
+const SmartModel = ({api}) => {
   return (
     <div className='smartmodel'>
-      <Model />
+      <Model api={api} />
     </div>
   );
 }
+
+export default SmartModel;

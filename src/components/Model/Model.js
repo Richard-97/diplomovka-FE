@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import socketIOClient from 'socket.io-client';
-import SensorCard from '../SensorCard/SensoreCard';
+import { potenciometerDataProcess } from '../../utils/config';
 import ChatBox from '../Chatbox/Chatbox';
 
 import { 
@@ -63,7 +63,7 @@ export default class Model extends Component {
         blinds: 0,
         blinds_position: 5,
         test: 3.6,
-        light: true,
+        light: false,
         fire: false,
         rain: false,
         gas: false,
@@ -205,8 +205,8 @@ export default class Model extends Component {
 
         this.mount.appendChild(this.renderer.domElement)
         this.start()
-
-        const socket = socketIOClient('http://localhost:5000', {});
+          console.log('api', this.props.api)
+        const socket = socketIOClient(this.props.api, {});
         this.setState({socket});
         socket.on('connect', data => {
           socket.emit('join', 'Server Connected to Client.');
@@ -231,9 +231,14 @@ export default class Model extends Component {
         });
 
         socket.on('update_sensors', data=>{
+          console.log('update sensors')
             this.setState({ rpiData: data })
             Object.keys(data).map(key=>{
-                if(key === 'switch_sensor'){
+                if(key === 'potenciometer'){
+                  console.log('oooooooooooooooooooooooo', data[key])
+                  this.setState({blinds_position: potenciometerDataProcess(data[key])});
+                }
+                else if(key === 'switch_sensor'){
                   if(data[key] === 1) {
                     this.setState({clima_on:true})
                   }
@@ -267,7 +272,7 @@ export default class Model extends Component {
                     : setTimeout(() => {
                       this.setState({fire: true})
                     }, 500);
-                else if (key === 'gas_sensor') data[key].data < 100 ? this.setState({gas: true}) : this.setState({gas: false})
+                else if (key === 'gas_sensor') data[key].data > 100 ? this.setState({gas: true}) : this.setState({gas: false})
                 else if(key === 'temperature') this.setState({temperature: data[key]})
                 else if(key === 'humidity') this.setState({humidity: data[key]})
 
@@ -307,7 +312,7 @@ export default class Model extends Component {
         simulateFire(this.state, window);
         simulateGas(this.state, window);
         if(this.state.blinds !== this.state.blinds_position){
-          rotateBlinds(blinds, this, window, this.state.blinds_position, this.state.direction)
+          rotateBlinds(blinds, this, window, this.state.blinds_position, this.state.blinds)
         }
         if(this.state.mixer !== undefined){
           this.state.mixer.update(this.state.clock.getDelta())
@@ -410,28 +415,11 @@ export default class Model extends Component {
         return (
           <Fragment>
             {
-              // this.state.loading ? 
-              //   <div className='model_loading'>
-              //     <p>Načítavam...</p>
-              //   </div>
-              //   :
-              //   <div className='smartmodel-controller'>
-              //     <SensorCard 
-              //           title='Vlhkosť'
-              //           value={this.state.humidity}
-              //           unit="%"
-              //           hint='Najpríjemnejšia vlhkosť vzduchu pre človeka je 50-60 %.'
-              //       />
-              //       <SensorCard 
-              //           title='Teplota'
-              //           value={this.state.temperature}
-              //           unit="°C"
-              //           hint='Najpríjemnejšia teplota v miestnosti pre človeka je 20-23 °C.'
-              //       />
-              //     <ControlCard title='Rolety' >
-              //       <InputSlider min={0} max={10} value={this.state.blinds_position} height='1rem' width='18rem' onLeft={()=>this.setState({direction: 'left', blinds_position: this.state.blinds_position-1})} onRight={()=>this.setState({direction: 'right', blinds_position: this.state.blinds_position+1})}/>
-              //     </ControlCard>
-              //   </div>
+              this.state.window2 === undefined && 
+                <div className='model_loading'>
+                  <p>Načítavam model...</p>
+                </div>
+               
             }
             <div style={{ width: '100%', height: '100vh' }} ref={(mount) => { this.mount = mount }} />
             <ChatBox
@@ -439,6 +427,8 @@ export default class Model extends Component {
                 data={this.state.rpiData}
                 actions={this.state.actions}
                 socket={this.state.socket}
+                api={this.props.api}
+                nodejsApi={this.props.nodejsApi}
             />
           </Fragment>
         )

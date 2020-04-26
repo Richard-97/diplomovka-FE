@@ -8,12 +8,20 @@ export const rotateDoor = (door, state) => {
     }
 }
 
-export const rotateBlinds = (blinds, self, window, position, direction) => {
+export const rotateBlinds = (blinds, self, window, position, actPos) => {
+    console.log('rotateeee', position, actPos)
     self.setState({blinds: position});
 
     blinds.forEach(blind=>{
-        if(direction === 'right' && position <=10) blind.rotateX(window.THREE.Math.degToRad(-18));
-        else if(direction === 'left' && position > 0) blind.rotateX(window.THREE.Math.degToRad(18));
+        if(position > actPos){
+            blind.rotateX(window.THREE.Math.degToRad((position-actPos)*18));
+        }
+        else{
+            blind.rotateX(window.THREE.Math.degToRad(-(actPos-position)*18))
+        }
+        // if(direction === 'right' && position <=10) blind.rotateX(window.THREE.Math.degToRad(-18));
+        // else if(direction === 'left' && position > 0) blind.rotateX(window.THREE.Math.degToRad(18));
+
     })
 }
 
