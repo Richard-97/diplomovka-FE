@@ -4,7 +4,7 @@ import App from './App';
 import auth from './utils/auth';
 
 //const api = 'http://localhost:5000'
-const api = 'https://diplomovka-be.herokuapp.com/'
+const api = 'https://diplomovka-be.herokuapp.com'
 const nodejsApi = 'https://nodejs-be.herokuapp.com';
 
 const RouterComponent = () => {
