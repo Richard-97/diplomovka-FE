@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import App from './App';
 import auth from './utils/auth';
 
-//const api = 'http://localhost:5000'
-const api = 'https://diplomovka-be.herokuapp.com'
-const nodejsApi = 'https://nodejs-be.herokuapp.com';
+const api = 'http://localhost:5000'
+//const api = 'https://diplomovka-be.herokuapp.com'
+//const nodejsApi = 'https://nodejs-be.herokuapp.com';
+const nodejsApi = 'hhtp://localhost:3000'
 
 const RouterComponent = () => {
     const [render, setRender] = useState(false);

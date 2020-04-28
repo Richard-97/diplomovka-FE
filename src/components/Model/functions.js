@@ -164,3 +164,7 @@ export const quaternionRotation = (object, q1, q2, q3, q4, window) => {
     let rotation = new window.THREE.Euler().setFromQuaternion(quat, "XYZ");
     return rotation;
 }
+
+export const updateLights = (lightSensor, labLightValue) => {
+    
+}

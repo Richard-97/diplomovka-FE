@@ -17,9 +17,6 @@ import {
 } from './functions';
 import chat_icon from '../../img/icons/chat.svg';
 
-import ControlCard from '../ControlCard/ControlCard';
-import InputSlider from '../InputSlider/InputSlider';
-
 export default class Model extends Component {
     constructor(){
       super();
@@ -107,8 +104,8 @@ export default class Model extends Component {
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.setClearColor( 0xcccccc, 0 );
 
-        var hemiLight = new window.THREE.HemisphereLight( 0xffffff, 0xffffff, 0.61 );
-        hemiLight.intensity = this.state.light ? 0.6 : 0.2;
+        var hemiLight = new window.THREE.HemisphereLight( 0xf3f3cf, 0xf3f3cf, 0.61 );
+        hemiLight.intensity = this.state.light ? 0.6 : 0.1;
         hemiLight.position.set( 0, 50, 0 );  
         scene.add( hemiLight );
 
@@ -116,7 +113,7 @@ export default class Model extends Component {
         dirLight.position.set( 0, 50, 0 );
         dirLight.castShadow = true;
         dirLight.shadow.mapSize = new window.THREE.Vector2(1024, 1024);
-        dirLight.intensity = this.state.light ? 2 : 0.2   
+        dirLight.intensity = this.state.light ? 2 : 0.2
         scene.add( dirLight );
 
         const lights = [];

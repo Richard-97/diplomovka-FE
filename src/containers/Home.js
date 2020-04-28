@@ -33,6 +33,7 @@ export default function Home({ api, nodejsApi, user }) {
           setExpertal(data);
         })
         socket.on('update_sensors', data=>{
+          console.log('rip', data)
             setRpiData(data);
         })
         socket.on('update_actions', data=>{
