@@ -4,7 +4,7 @@ import Panel from './Panel';
 import { generateAnswer } from './Answers';
 
 export default function Chatbox({icon, data, actions, socket, api, nodejsApi}) {
-
+    console.log(api, nodejsApi)
     const [open, setOpen] = useState(false);
     const [url, setUrl] = useState(undefined);
     const [answer, setAnswer] = useState('');
