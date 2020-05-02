@@ -1,4 +1,6 @@
-export const generateAnswer = (gnamaker_response, rpiData, actions, socket) => {
+import { updateLastActionTable } from '../../utils/config';
+
+export const generateAnswer = (gnamaker_response, rpiData, actions, socket, api, userID) => {
     console.log('rpi data', rpiData)
     if(rpiData === undefined || rpiData === []) return 'Dáta nie sú k dispozícií. Opýtaj sa ešte raz prosím.'
     if(gnamaker_response.error !== undefined) return '';
@@ -76,6 +78,26 @@ export const generateAnswer = (gnamaker_response, rpiData, actions, socket) => {
             if(!actions.window2) return 'Okno číslo dva je zatvorené.'
             socket.emit('update_sensors', {bool: false, id: '5'})
             return 'Zatváram okno číslo dva.'
+        case 'smart-mode on':
+            if(actions.smart_mode){
+                return 'Inteligentný režim je zapnutý.'
+            }
+            else{
+                updateLastActionTable(api, userID, `Zapnutie smart-modu`, new Date(), ()=>{
+                    socket.emit('update_sensors', {bool: true, id: '9'})
+                })
+                return 'Zapínam inteligentný režim.'
+            }
+        case 'smart-mode off':
+            if(!actions.smart_mode){
+                return 'Inteligentný režim je vypnutý.'
+            }
+            else{
+                updateLastActionTable(api, userID, `Vypnutie smart-modu`, new Date(), ()=>{
+                    socket.emit('update_sensors', {bool: false, id: '9'})
+                })
+                return 'Vypínam inteligentný režim.'
+            }
         default: return 'Zopakuj otázku prosím.'
     }
 }

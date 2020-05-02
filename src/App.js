@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { withRouter, Route } from 'react-router-dom';
 import auth from './utils/auth';
 
-import UserContext from './Context';
 import ProtectedRoute from './Routes/ProtectiveRoute';
 
 import LogIn from './containers/LogIn';
@@ -10,19 +9,12 @@ import Registration from './containers/Registration';
 import Home from './containers/Home';
 import SmartModel from './containers/SmartModel';
 import SimpleController from './containers/SimpleController';
-import Settings from './containers/Settings';
 import Profile from './containers/Profile';
+import Overview from './containers/Overview';
 
 import Menu from './components/Menu/Menu';
 
 const App = ({api, nodejsApi, history, clearAuth}) => {
-
-    const [userID, setUserID] = useState(undefined);
-    const [firstName, setFirstName] = useState('Richard');
-    const [lastName, setLastName] = useState('Rusňák');
-    const [email, setEmail] = useState('richard.rusnak@student.tuke.sk');
-
-    //const api = 'https://diplomovka-be.herokuapp.com/';
     
     return (
 
@@ -65,21 +57,22 @@ const App = ({api, nodejsApi, history, clearAuth}) => {
             nodejsApi={nodejsApi} 
             component={SimpleController}
             user={auth.getUser()}
-          />
-          <ProtectedRoute 
-            path='/nastavenia' 
-            authentificated={auth.isAuthentificated()} 
-            api={api} 
-            nodejsApi={nodejsApi} 
-            component={Settings} 
             user={auth.getUser()}
           />
-          <Route 
+          <ProtectedRoute 
             path='/profil' 
             authentificated={auth.isAuthentificated()} 
             api={api} 
             nodejsApi={nodejsApi} 
+            user={auth.getUser()}
             component={Profile}
+          />
+          <ProtectedRoute 
+            path='/prehlad' 
+            authentificated={auth.isAuthentificated()} 
+            api={api} 
+            user={auth.getUser()}
+            component={Overview}
           />
         </div>
     );

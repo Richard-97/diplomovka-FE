@@ -1,18 +1,32 @@
 import React, { useState } from 'react';
 import ProfileInfo from '../components/ProfileInfo/ProfileInfo'
+import auth from '../utils/auth';
 
-export default function Profile() {
-    
-    const renderProfileInfo = (user) => {
-        return Object.keys(user).map((key, i) => {
-            return(
-                <ProfileInfo text={user[key]} className='profile-info' key={i} />
-            )
+export default function Profile({user, api}) {
+
+    const updateUser = (type, value) => {
+        fetch(`${api}/${type}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                value, id: user.id
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.res === 'ok'){
+                auth.updateUser(type, value)
+            }
         })
     }
     return (
         <div className='profile'>
-            { renderProfileInfo({firstName: 'Richard', lastName: 'Rusňák', email: 'peter.novak@gmail.com', password: '*************'}) }
+            <ProfileInfo text={user.surname} type='surname' className='profile-info' onUpdate={updateUser} />
+            <ProfileInfo text={user.lastname} type='lastname' className='profile-info' onUpdate={updateUser} />
+            <ProfileInfo text={user.email} type='email' className='profile-info' onUpdate={updateUser} />
+            <ProfileInfo text={'Nové heslo'} type='password' className='profile-info' onUpdate={updateUser} />
         </div>
     )
 }

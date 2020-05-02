@@ -1,0 +1,15 @@
+.sensorTest{
+    width: 100%;
+    &-box{
+        display: flex;
+        justify-content: space-around;
+        p{
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+        img{
+            height: 4rem;
+            width: auto;
+        }
+    }
+}

@@ -1,23 +1,19 @@
 import React from 'react'
 import VideoStream from '../VideoStream/VideoStream';
-import UserContext from '../../Context';
+import SensorTest from '../SensorTest/SensorTest';
 
-export default function ModalWindow({ title, type, onClick }) {
+export default function ModalWindow({ title, type, onClick, api }) {
 
         return(
-            <UserContext.Consumer>
-                {
-                    ({ api }) => (
-                        <div className='modalwindow'>
-                            <div className='modalwindow-box'>
-                                {
-                                    type==='camera' && <VideoStream api={api} />
-                                }
-                                <p onClick={onClick} className='modalwindow-box__p'>X</p>
-                            </div>
-                        </div>
-                    )
-                }  
-            </UserContext.Consumer>
+            <div className='modalwindow'>
+                <div className='modalwindow-box'>
+                    {
+                        type === 'camera' 
+                        ? <VideoStream api={api} />
+                        : <SensorTest api={api} />
+                    }
+                    <p onClick={onClick} className='modalwindow-box__p'>X</p>
+                </div>
+            </div>
         )
 }

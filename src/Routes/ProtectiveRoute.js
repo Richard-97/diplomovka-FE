@@ -14,7 +14,6 @@ function ProtectiveRoute({authentificated, component: Component, path, api, node
                 return <Component {...props} api={api} />
             }
             return <Redirect to="/"/>
-        
         }
     }}/>
 }

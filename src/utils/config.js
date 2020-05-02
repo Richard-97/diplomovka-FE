@@ -13,6 +13,7 @@ export const potenciometerDataProcess = potenciometerData => {
 }
 
 export const updateLastActionTable = (api, userID, action, time, cb) => {
+    console.log('user', userID)
     fetch(`${api}/updateLastActionTable`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

@@ -28,10 +28,14 @@ export default function VideoStream({ api }) {
     }, [])
     
     const playStremHandler = (play) => {
-        fetch('http://localhost:5000/video_feed',{
+        fetch(`${api}/video_feed`,{
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ play })
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                play
+            })
             })
             .then(res => res.json())
             .then(data=>setCamera(data.data))

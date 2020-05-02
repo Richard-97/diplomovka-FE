@@ -4,13 +4,12 @@ import ChatBox from '../components/Chatbox/Chatbox';
 import LastActionsTable from '../components/LastActionsTable/LastActionsTable';
 import chat_icon from '../img/icons/chat.svg';
 import socketIOClient from 'socket.io-client';
+import _ from 'lodash';
 import { ruleBaseSystemBehavior } from '../utils/expertalSystem';
 
-import UserContext from '../Context';
 import Loader from '../components/Loader/Loader';
 
 export default function Home({ api, nodejsApi, user }) {
-
   const [rpiData, setRpiData] = useState({});
   const [actions, setActions] = useState({});
   const [tableData, setTableData] = useState([]);
@@ -25,17 +24,18 @@ export default function Home({ api, nodejsApi, user }) {
           socket.emit('join', 'Server Connected to Client.');
           setConnected(true);
         });
-        socket.emit('expertal_system');
+        //socket.emit('expertal_system');
         socket.emit('update_sensors_grovepi_interval');
-        socket.emit('update_sensors_start');
 
         socket.on('expertal_system', data => {
+          console.log('EXPERTAL DATA', data)
           setExpertal(data);
         })
         socket.on('update_sensors', data=>{
           console.log('rip', data)
             setRpiData(data);
         })
+        
         socket.on('update_actions', data=>{
           setActions(data);
         })
@@ -44,11 +44,12 @@ export default function Home({ api, nodejsApi, user }) {
         })
 
         const interval2 = setInterval(() => {
-          socket.emit('update_sensors_grovepi_interval');
-        }, 15000);
+          console.log('EXPERTAL SZSTEM START')
+          socket !== null && socket.emit('expertal_system');
+      }, 15000);
 
         const interval = setInterval(() => {
-            socket.emit('expertal_system');
+          socket.emit('update_sensors_grovepi_interval');
         }, 15000);
 
         return () => {
@@ -58,7 +59,7 @@ export default function Home({ api, nodejsApi, user }) {
     }, []);
 
     useEffect(() => {
-      ruleBaseSystemBehavior(expertal, socket);
+      actions.smart_mode && ruleBaseSystemBehavior(expertal, socket);
     }, [expertal]);
 
     return(
@@ -105,9 +106,13 @@ export default function Home({ api, nodejsApi, user }) {
             socket={socket}
             api={api}
             nodejsApi={nodejsApi}
+            userID={user.id}
           />
                   </>
-                  : <Loader />
+                  :<div className = 'loader-message'>
+                      <Loader />
+                    <p>Prebieha pripojenie na server...</p>
+              </div>
               }
               
           </div>

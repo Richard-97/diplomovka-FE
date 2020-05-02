@@ -18,6 +18,7 @@ import clima_on from '../img/icons/clima_on.svg';
 import smart_mode_on from '../img/icons/smart_mode_on.svg';
 import smart_mode_off from '../img/icons/smart_mode_off.svg';
 import InputSlider from '../components/InputSlider/InputSlider';
+import motion_icon from '../img/icons/motion.svg';
 
 import { 
     potenciometerDataProcess, 
@@ -41,6 +42,7 @@ export default function SimpleController({ user, api, nodejsApi }) {
     const [gas, setGas] = useState(false);
     const [fire, setFire] = useState(false);
     const [smartMode, setSmartMode] = useState(false);
+    const [motion, setMotion] = useState(false);
 
     useEffect(()=>{
         const socket = socketIOClient(api, {});
@@ -52,10 +54,10 @@ export default function SimpleController({ user, api, nodejsApi }) {
         if(connected){
 
         }
-        const interval = setInterval(() => {
-            socket.emit('update_sensors_grovepi_interval')
-            console.log('update grovepi')
-        }, 15000);
+        // const interval = setInterval(() => {
+        //     socket.emit('update_sensors_grovepi_interval')
+        //     console.log('update grovepi')
+        // }, 15000);
 
         socket.on('update_actions', data=>{
             setActions(data);
@@ -79,39 +81,40 @@ export default function SimpleController({ user, api, nodejsApi }) {
                 else if (key === 'door_sensor') setDoor(data[key])
                 else if (key === 'window1') setWindow1(data[key])
                 else if (key === 'window2') setWindow2(data[key])
+                else if(key === 'motion_sensor') setMotion(data[key])
             })
         });
         return () => {
-            clearInterval(interval);
+            //clearInterval(interval);
         }
         }, []);
 
     useEffect(()=>{
         if(socket !== null){
-            socket.emit('update_sensor_lights', {bool: mainLight})
+            updateLastActionTable(api, user.id, `${!mainLight ? 'Vypnutie' : 'Zapnutie'} svetla`, new Date(), () =>{
+                socket.emit('update_sensor_lights', {bool: mainLight})
+            });
         }
     }, [mainLight])
+
     useEffect(()=>{
         socket !== null &&
-            socket.emit('update_sensors', {bool: clima, id: '2'})
-    }, [clima])
-    useEffect(()=>{
-        socket !== null &&
-            socket.emit('update_sensors', {bool: door, id: '3'})
-    }, [door])
-    useEffect(()=>{
-        socket !== null &&
-            socket.emit('update_sensors', {bool: window1, id: '4'})
+            updateLastActionTable(api, user.id, `${!window1 ? 'Zatvorenie' : 'Otvorenie'} okna č. 1`, new Date(), () =>{
+                socket.emit('update_sensors', {bool: window1, id: '4'})
+            });
     }, [window1])
     useEffect(()=>{
         if(socket !== null){
-            socket.emit('update_sensors', {bool: window2, id: '5'})
-            updateLastActionTable(api, user.id, `${window2 ? 'Otvorenie okna': 'Zatvorenie okna'}`, new Date())
+            updateLastActionTable(api, user.id, `${window2 ? 'Otvorenie' : 'Zatvorenie'} okna č. 2`, new Date(), () => {
+                socket.emit('update_sensors', {bool: window2, id: '5'})
+            })
         }
     }, [window2])
     useEffect(() => {
         if(socket !== null){
-            socket.emit('update_sensors', {bool: smartMode, id: '9'})
+            updateLastActionTable(api, user.id, `${window2 ? 'Zapnutie smart-modu': 'Vypnutie smart-modu'}`, new Date(), () => {
+                socket.emit('update_sensors', {bool: smartMode, id: '9'})
+            })
         }
     }, [smartMode]);
 
@@ -134,9 +137,9 @@ export default function SimpleController({ user, api, nodejsApi }) {
                         
                     </div>
                     <div className='simplecontoller-controlField'>
-                        <ControlCard title='Hlavné svetlo' icon_on={light_on} icon_off={light_off} power={mainLight} onClick={()=>setMainLight(!mainLight)} />
-                        <ControlCard title='Klima' icon_on={clima_on} power={clima} onClick={()=>setClima(!clima)} />
-                        <ControlCard title='Dvere' icon_on={door_open} icon_off={door_close}  power={door} onClick={()=>setDoor(!door)} />
+                        <ControlCard title='Svetlo' icon_on={light_on} icon_off={light_off} power={mainLight} onClick={()=>setMainLight(!mainLight)} />
+                        <ControlCard title='Klima' icon_on={clima_on} power={clima} disabled />
+                        <ControlCard title='Dvere' icon_on={door_open} icon_off={door_close}  power={door} disabled />
                         <ControlCard title='Okno 1' icon_on={window_open} icon_off={window_close}  power={window1} onClick={()=>setWindow1(!window1)} />  
                         <ControlCard title='Okno 2' icon_on={window_open} icon_off={window_close}  power={window2} onClick={()=>setWindow2(!window2)} />
                         <ControlCard title='Rolety' >
@@ -145,13 +148,13 @@ export default function SimpleController({ user, api, nodejsApi }) {
                         <ControlCard title='Smart mode' icon_on={smart_mode_on} icon_off={smart_mode_off}  power={smartMode} onClick={()=>setSmartMode(!smartMode)}/>
                     </div>
                     <div className='simplecontoller-infoField'> 
-                        <InfoCard title='Oheň' danger={fire} />
-                        <InfoCard title='Plyn' danger={gas} />
-                        <InfoCard title='Dážď' danger={false} />
+                        <InfoCard title='Oheň' action={fire} />
+                        <InfoCard title='Plyn' action={gas} />
+                        <InfoCard title='Pohyb' action={motion} icon={motion_icon} />
                     </div>
                     <div className='simplecontoller-others'>
-                        <SimpleCard title='Kamera' type='camera'/>
-                        <SimpleCard title='Test senzorov' type='test' />
+                        <SimpleCard title='Kamera' type='camera' api={api}/>
+                        <SimpleCard title='Test senzorov' type='test' api={api} />
                     </div>
                     <ChatBox
                         icon={chat_icon}

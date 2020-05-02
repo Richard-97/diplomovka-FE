@@ -7,8 +7,8 @@ import _ from 'lodash';
 import { updateLastActionTable } from '../../utils/config';
 
 export default function HomeDefaults({ data, socket, actions, api,  userID }) {
-    console.log('TEST', actions)
     const [clima, setClima] = useState(_.get(data, 'switch_sensor', 0));
+    const [alarm, setAlarm] = useState(false);
     const [window1, setWindow1] = useState(false);
     const [window2, setWindow2] = useState(false);
     const [smartMode, setSmartMode] =  useState(false);
@@ -24,6 +24,7 @@ export default function HomeDefaults({ data, socket, actions, api,  userID }) {
         setWindow2(actions.window2);
         setMainLight(actions.main_light);
         setSmartMode(actions.smart_mode);
+        setAlarm(actions.alarm);
     }, [actions]);
    
     const window1Handler = () => {
@@ -47,7 +48,13 @@ export default function HomeDefaults({ data, socket, actions, api,  userID }) {
     const smartModeHandler = () => {
         setSmartMode(!smartMode);
         updateLastActionTable(api, userID, `${!smartMode ? 'Zapnutie' : 'Vypnutie'} smart-modu`, new Date(), ()=>{
-            socket.emit('update_sensors', {bool: smartMode, id: '9'});
+            socket.emit('update_sensors', {bool: !smartMode, id: '9'});
+        })
+    }
+    const alarmHandler = () => {
+        setAlarm(!alarm);
+        updateLastActionTable(api, userID, `${!alarm ? 'Zapnutie' : 'Vypnutie'} alarmu`, new Date(), ()=>{
+            socket.emit('update_sensors', {bool: !alarm, id: '2'});
         })
     }
     return (
@@ -58,7 +65,7 @@ export default function HomeDefaults({ data, socket, actions, api,  userID }) {
                     :<>
                         <li>
                             <p>Klima</p>
-                            <SlideButton buttonON={clima == 1} onClick={()=>setClima(!clima)} disabled/>
+                            <SlideButton buttonON={clima == 1} disabled/>
                         </li>
                         <li>
                             <p>Okno 1</p>
@@ -69,7 +76,7 @@ export default function HomeDefaults({ data, socket, actions, api,  userID }) {
                             <SlideButton buttonON={window2} onClick={window2Handler} />
                         </li>
                         <li>
-                            <p>Hlavne svetlo</p>
+                            <p>Svetlo</p>
                             <SlideButton buttonON={mainLight} onClick={lightHandler} />
                         </li>
                         <li>
@@ -79,6 +86,10 @@ export default function HomeDefaults({ data, socket, actions, api,  userID }) {
                         <li>
                             <p>Smart mode</p>
                             <SlideButton buttonON={smartMode} onClick={smartModeHandler}/>
+                        </li>
+                        <li>
+                            <p>ALARM</p>
+                            <SlideButton buttonON={alarm} onClick={alarmHandler} color={['#dd4b39', '#017edb']}/>
                         </li>
                     </>
             }

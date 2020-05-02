@@ -37,6 +37,13 @@ class Auth{
         })
     }
 
+    updateUser(type, value){
+        if(type === 'surname') this.user.surname = value
+        else if(type === 'lastname') this.user.lastname = value
+        else if(type === 'email') this.user.email = value
+        return
+    }
+
     logout(cb){
         this.auhenticated = false;
         this.user = null;

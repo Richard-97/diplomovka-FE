@@ -252,7 +252,7 @@ body {
   .profile-info {
     height: 6rem;
     width: fit-content;
-    min-width: 37rem;
+    min-width: 50rem;
     padding: 1.5rem 3rem;
     margin: 1rem;
     background-color: rgba(50, 49, 48, 0.6);
@@ -1001,3 +1001,15 @@ canvas {
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
+
+.sensorTest {
+  width: 100%; }
+  .sensorTest-box {
+    display: flex;
+    justify-content: space-around; }
+    .sensorTest-box p {
+      font-size: 1.5rem;
+      text-transform: uppercase; }
+    .sensorTest-box img {
+      height: 4rem;
+      width: auto; }

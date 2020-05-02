@@ -1,20 +1,19 @@
 import React, { useState, Fragment } from 'react'
 
-export default function ProfileInfo({text, className}) {
+export default function ProfileInfo({text, className, type, onUpdate}) {
     const [edit, setEdit] = useState(false);
     const [value, setValue] = useState(text);
 
     const onSaveButtonHandler = () => {
         setEdit(false)
-        if(value === text){ return }
-        console.log('database update')
+        onUpdate(type, value)
     }
 
     return (
         <div className={className} >
             {edit ? 
                 <Fragment>
-                    <input className='profile-input' type='text' value={value} onChange={(e)=>setValue(e.target.value)} /> 
+                    <input className='profile-input' type={text !== 'Nové heslo'? 'text' : 'password'} value={value} onChange={(e)=>setValue(e.target.value)} /> 
                     <p className='profile-edit' onClick={onSaveButtonHandler}>uložiť</p>
                 </Fragment>
             : 

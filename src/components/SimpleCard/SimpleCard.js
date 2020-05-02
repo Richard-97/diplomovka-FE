@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Button from '../Button/Button';
 import ModalWindow from '../ModalWindow/ModalWindow';
 
-export default function SimpleCard({ title, type }) {
+export default function SimpleCard({ title, type, api }) {
 
     const [modal, setModal] = useState(false);
 
@@ -18,7 +18,7 @@ export default function SimpleCard({ title, type }) {
             </div>
             {
                 modal &&
-                    <ModalWindow onClick={()=>setModal(!modal)} type={type} />
+                    <ModalWindow onClick={()=>setModal(!modal)} type={type} api={api} />
             }
         </div>
     )

@@ -13,19 +13,16 @@ function Menu({ clearAuth }) {
             <div className={active?'menu_list active':'menu_list'}>
                 <ul>
                     <li>
-                        <Link to='/domov' replace>Domov</Link>
+                        <Link to='/domov' replace onClick={()=>setActive(!active)}>Domov</Link>
                     </li>
                     <li>
-                        <Link to='/modelpriestoru'>Model priestoru</Link>
+                        <Link to='/modelpriestoru' onClick={()=>setActive(!active)}>Model priestoru</Link>
                     </li>
                     <li>
-                        <Link to='/jednoducheovladanie'>Jednoduche ovladanie</Link>
+                        <Link to='/jednoducheovladanie' onClick={()=>setActive(!active)}>Jednoduche ovladanie</Link>
                     </li>
                     <li>
-                        <Link to='/profil'>Profil</Link>
-                    </li>
-                    <li>
-                        <Link to='/nastavenia'>Nastavenia</Link>
+                        <Link to='/profil' onClick={()=>setActive(!active)}>Profil</Link>
                     </li>
                     <li>
                         <Link to='/' onClick={ clearAuth }>Odhlasiť</Link>

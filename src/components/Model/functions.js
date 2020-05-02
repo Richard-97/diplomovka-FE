@@ -1,13 +1,3 @@
-export const rotateDoor = (door, state) => {
-    console.log('DOOR', door)
-    if(state){
-        door.rotateY(Math.PI/2);
-    }
-    else{
-        door.rotateY(-Math.PI/2);
-    }
-}
-
 export const rotateBlinds = (blinds, self, window, position, actPos) => {
     console.log('rotateeee', position, actPos)
     self.setState({blinds: position});

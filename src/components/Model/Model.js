@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import socketIOClient from 'socket.io-client';
 import { potenciometerDataProcess } from '../../utils/config';
 import ChatBox from '../Chatbox/Chatbox';
+import { updateLastActionTable } from '../../utils/config';
+import ModalWindow from '../ModalWindow/ModalWindow';
 
 import { 
   rotateDoor, 
@@ -73,6 +75,8 @@ export default class Model extends Component {
         humidity: undefined,
         lights_on: false,
         clima_on: false,
+        camera_open: false,
+        doorObj: undefined,
     }
 
     componentDidUpdate(_, prevState) {
@@ -103,7 +107,7 @@ export default class Model extends Component {
         renderer.setPixelRatio( window.devicePixelRatio );
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.setClearColor( 0xcccccc, 0 );
-
+        console.log('PROPS', this.props)
         var hemiLight = new window.THREE.HemisphereLight( 0xf3f3cf, 0xf3f3cf, 0.61 );
         hemiLight.intensity = this.state.light ? 0.6 : 0.1;
         hemiLight.position.set( 0, 50, 0 );  
@@ -133,20 +137,20 @@ export default class Model extends Component {
 
         var axesHelper = new window.THREE.AxesHelper( 25 );
         scene.add( axesHelper );
-        let door;
         let lightSwitch;
+        let cameraObj;
+        let door = undefined;
         loader.load(
             '/blender-files/test.glb',
             ( gltf ) => {
               const model = gltf.scene;
               model.castShadow = true
-              
-              console.log('model', gltf)
+          
               this.setState({mixer: new window.THREE.AnimationMixer( model )})
               
               model.children.map((child, i)=>{
                 if(child.name === 'Switch') lightSwitch = child;
-                else if(child.name === 'Door') door = child;
+                else if(child.name === 'Door') this.setState({doorObj: child});
                 else if(child.name === 'Wall1') this.setState({wall1: child});
                 else if(child.name === 'Wall2') this.setState({wall2: child});
                 else if(child.name === 'Wall3') this.setState({wall3: child});
@@ -170,9 +174,15 @@ export default class Model extends Component {
                 else if(child.name === 'Shelf-small') this.setState({shelfSmall: child});
                 else if(child.name === 'Window-up1') this.setState({window1: child});
                 else if(child.name === 'Window-up2') this.setState({window2: child});
+                else if(child.name === 'Camera') cameraObj = child;
               })
-              //this.onClickObjectHandler(door, () => rotateDoor(door, this, this.state.door), domEvents);
-              //this.onClickObjectHandler(lightSwitch, () => toogleLight(lightSwitch, this, this.state.light, scene, hemiLight, dirLight), domEvents);
+              this.onClickObjectHandler(cameraObj, () => this.setState({camera_open: true}), domEvents);
+              this.onClickObjectHandler(lightSwitch, () => {
+                this.setState({light_on: !this.state.light_on});
+                updateLastActionTable(this.props.api, this.props.userID, `${!this.state.light_on ? 'Zapnutie' : 'Vypnutie'} svetla`, new Date(), ()=>{
+                  socket.emit('update_sensor_lights', {bool: this.state.light_on});
+              })
+              } , domEvents);
               gltf.scene.traverse(function (child){
                 
                 if(child.isMesh){
@@ -188,7 +198,7 @@ export default class Model extends Component {
               
             },
             ( xhr ) => {
-                xhr.loaded / 13890592 * 100 > 95 && this.setState({loading: false})
+                //xhr.loaded / 13890592 * 100 > 95 && this.setState({loading: false})
             },
             ( error ) => {
                 console.error( 'An error happened', error );
@@ -249,18 +259,7 @@ export default class Model extends Component {
                   toogleLight( this.state.light_on, hemiLight, dirLight);
                 }
                 else if(key === 'door_sensor'){
-                  if(data[key]){
-                    setTimeout(() => {
-                      !this.state.door && rotateDoor(door, this.state.door)
-                      this.setState({door: true}) 
-                    }, 500);
-                  } 
-                  else {
-                    setTimeout(() => {
-                      this.state.door && rotateDoor(door, this.state.door);
-                      this.setState({door: false})
-                    }, 500);
-                  }
+                  this.setState({door: data[key]}) 
                 }
                 else if(key === 'fire_sensor') data[key] === 1 
                     ? setTimeout(() => {
@@ -305,7 +304,6 @@ export default class Model extends Component {
             if(child.name.includes('blind')) blinds.push(child)
           })
         }
-        simulateRain(this.state);
         simulateFire(this.state, window);
         simulateGas(this.state, window);
         if(this.state.blinds !== this.state.blinds_position){
@@ -319,8 +317,20 @@ export default class Model extends Component {
             this.state.clima.material.color.setHex( 0x5562b6 );
           }
           else this.state.clima.material.color.setHex( 0xffffff );
+          if(this.state.door){
+            let rotation = quaternionRotation(this.state.doorObj, 0,1,0,-0.5, window);
+            this.state.doorObj.rotation.x = rotation.x;
+            this.state.doorObj.rotation.y = rotation.y;
+            this.state.doorObj.rotation.z = rotation.z;
+          }
+          else{
+            let rotation = quaternionRotation(this.state.doorObj, 0,0,0,0, window);
+            this.state.doorObj.rotation.x = rotation.x;
+            this.state.doorObj.rotation.y = rotation.y;
+            this.state.doorObj.rotation.z = rotation.z;
+          }
           if(this.state.window1Open){
-            let rotation = quaternionRotation(this.state.window1, 0,1,0.1,0, window);
+            let rotation = quaternionRotation(this.state.window1, 0,1,-0.1,0, window);
             this.state.window1.rotation.x = rotation.x;
             this.state.window1.rotation.y = rotation.y;
             this.state.window1.rotation.z = rotation.z;
@@ -332,7 +342,7 @@ export default class Model extends Component {
             this.state.window1.rotation.z = rotation.z;
           }
           if(this.state.window2Open){
-            let rotation = quaternionRotation(this.state.window2, 0,1,0.1,0, window);
+            let rotation = quaternionRotation(this.state.window2, 0,1,-0.1,0, window);
             this.state.window2.rotation.x = rotation.x;
             this.state.window2.rotation.y = rotation.y;
             this.state.window2.rotation.z = rotation.z;
@@ -410,24 +420,27 @@ export default class Model extends Component {
 
       render(){
         return (
-          <Fragment>
-            {
-              this.state.window2 === undefined && 
-                <div className='model_loading'>
-                  <p>Načítavam model...</p>
-                </div>
-               
-            }
-            <div style={{ width: '100%', height: '100vh' }} ref={(mount) => { this.mount = mount }} />
-            <ChatBox
-                icon={chat_icon}
-                data={this.state.rpiData}
-                actions={this.state.actions}
-                socket={this.state.socket}
-                api={this.props.api}
-                nodejsApi={this.props.nodejsApi}
-            />
-          </Fragment>
+              <Fragment>
+              {
+                this.state.window2 === undefined && 
+                  <div className='model_loading'>
+                    <p>Načítavam model...</p>
+                  </div>
+                 
+              }
+              <div style={{ width: '100%', height: '100vh' }} ref={(mount) => { this.mount = mount }} />
+              {
+                this.state.camera_open &&  <ModalWindow onClick={()=>this.setState({camera_open: false})} type={'camera'} api={this.props.api} />
+              }
+              <ChatBox
+                  icon={chat_icon}
+                  data={this.state.rpiData}
+                  actions={this.state.actions}
+                  socket={this.state.socket}
+                  api={this.props.api}
+                  nodejsApi={this.props.nodejsApi}
+              />
+            </Fragment>
         )
       }
   }
