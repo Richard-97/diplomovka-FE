@@ -21,9 +21,6 @@ export default function VideoStream({ api, socket }) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                play
-            })
             })
             .then(res => res.json())
             // .then(data=>{
