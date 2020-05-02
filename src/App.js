@@ -57,7 +57,6 @@ const App = ({api, nodejsApi, history, clearAuth}) => {
             nodejsApi={nodejsApi} 
             component={SimpleController}
             user={auth.getUser()}
-            user={auth.getUser()}
           />
           <ProtectedRoute 
             path='/profil' 

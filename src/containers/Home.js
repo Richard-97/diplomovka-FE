@@ -55,6 +55,7 @@ export default function Home({ api, nodejsApi, user }) {
         return () => {
         clearInterval(interval);
         clearInterval(interval2);
+        socket.disconnect()
       }
     }, []);
 

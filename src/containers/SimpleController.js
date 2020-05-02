@@ -54,10 +54,10 @@ export default function SimpleController({ user, api, nodejsApi }) {
         if(connected){
 
         }
-        // const interval = setInterval(() => {
-        //     socket.emit('update_sensors_grovepi_interval')
-        //     console.log('update grovepi')
-        // }, 15000);
+        const interval = setInterval(() => {
+            socket.emit('update_sensors_grovepi_interval')
+            console.log('update grovepi')
+        }, 15000);
 
         socket.on('update_actions', data=>{
             setActions(data);
@@ -85,7 +85,7 @@ export default function SimpleController({ user, api, nodejsApi }) {
             })
         });
         return () => {
-            //clearInterval(interval);
+            clearInterval(interval);
         }
         }, []);
 
@@ -153,7 +153,7 @@ export default function SimpleController({ user, api, nodejsApi }) {
                         <InfoCard title='Pohyb' action={motion} icon={motion_icon} />
                     </div>
                     <div className='simplecontoller-others'>
-                        <SimpleCard title='Kamera' type='camera' api={api}/>
+                        <SimpleCard title='Kamera' type='camera' api={api} socket={socket} />
                         <SimpleCard title='Test senzorov' type='test' api={api} />
                     </div>
                     <ChatBox

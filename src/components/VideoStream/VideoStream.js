@@ -1,27 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import io from 'socket.io-client';
 import Button from '../Button/Button';
 
-export default function VideoStream({ api }) {
-    const [socket, setSocket] = useState(null);
+export default function VideoStream({ api, socket }) {
     const [camera, setCamera] = useState(null);
     const [play, setPlay] = useState(true);
 
     const connect = () => {
-        const socket = io(api, {});
-        setSocket(socket);
-        socket.on('connect', data => {
-            socket.emit('join', 'Server Connected to Client.');
-        });
-        socket.on('video_flask', data => {
+        socket.on('video_flask', data=>{
+            console.log(data)
             setCamera(data.data)
-        })
-        socket.on('message', data => {
-            console.log(data)
-        })
-        socket.on('video_feed', data => {
-            console.log(data)
-        })
+          })
     }
     useEffect(()=>{
         connect()
@@ -29,18 +17,24 @@ export default function VideoStream({ api }) {
     
     const playStremHandler = (play) => {
         fetch(`${api}/video_feed`,{
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                play
-            })
+            // body: JSON.stringify({
+            //     play
+            // })
             })
             .then(res => res.json())
-            .then(data=>setCamera(data.data))
+            // .then(data=>{
+            //     console.log('oo', data)
+            //     setCamera(data)
+            // })
+            .then(data => {
+                console.log(data)
+            })
             .catch(console.log)
-            setPlay(!play)
+            setPlay(!play);
     }
     return (
         <Fragment>
