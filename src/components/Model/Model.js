@@ -198,7 +198,7 @@ export default class Model extends Component {
               
             },
             ( xhr ) => {
-                //xhr.loaded / 13890592 * 100 > 95 && this.setState({loading: false})
+                xhr.loaded / 13890592 * 100 > 95 && this.setState({loading: false})
             },
             ( error ) => {
                 console.error( 'An error happened', error );
@@ -299,8 +299,8 @@ export default class Model extends Component {
       animate = () => {
         this.renderScene();
         let blinds = [];
-        if(this.scene.children[3] !== undefined){
-          this.scene.children[3].children.map((child, i)=>{
+        if(this.scene.children[4] !== undefined){
+          this.scene.children[4].children.map((child, i)=>{
             if(child.name.includes('blind')) blinds.push(child)
           })
         }
@@ -312,7 +312,8 @@ export default class Model extends Component {
         if(this.state.mixer !== undefined){
           this.state.mixer.update(this.state.clock.getDelta())
         }
-        if(this.scene.children[3] !== undefined ){
+        console.log('this.scene', this.scene)
+        if(this.scene.children[4] !== undefined ){
           if(this.state.clima_on){
             this.state.clima.material.color.setHex( 0x5562b6 );
           }
