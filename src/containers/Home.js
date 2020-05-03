@@ -46,7 +46,7 @@ export default function Home({ api, nodejsApi, user }) {
         const interval2 = setInterval(() => {
           console.log('EXPERTAL SZSTEM START')
           socket !== null && socket.emit('expertal_system');
-      }, 15000);
+      }, 5000);
 
         const interval = setInterval(() => {
           socket.emit('update_sensors_grovepi_interval');

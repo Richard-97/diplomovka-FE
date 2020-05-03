@@ -10,6 +10,12 @@ export default function VideoStream({ api, socket }) {
             console.log(data)
             setCamera(data.data)
           })
+        socket.on('message', data => {
+            console.log(data)
+        })
+        socket.on('video_feed', data => {
+            console.log(data)
+        })
     }
     useEffect(()=>{
         connect()
@@ -21,6 +27,9 @@ export default function VideoStream({ api, socket }) {
             headers: {
                 'Content-Type': 'application/json',
             },
+            // body: JSON.stringify({
+            //     play
+            // })
             })
             .then(res => res.json())
             // .then(data=>{

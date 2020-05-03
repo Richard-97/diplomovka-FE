@@ -25,7 +25,6 @@ export default function Profile({user, api}) {
         <div className='profile'>
             <ProfileInfo text={user.surname} type='surname' className='profile-info' onUpdate={updateUser} />
             <ProfileInfo text={user.lastname} type='lastname' className='profile-info' onUpdate={updateUser} />
-            <ProfileInfo text={user.email} type='email' className='profile-info' onUpdate={updateUser} />
             <ProfileInfo text={'Nové heslo'} type='password' className='profile-info' onUpdate={updateUser} />
         </div>
     )

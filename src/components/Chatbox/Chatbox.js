@@ -11,35 +11,52 @@ export default function Chatbox({icon, data, actions, socket, api, nodejsApi, us
     const [error, setError] = useState('');
 
     useEffect(() => {
-        fetch(`${api}/text_to_speech`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                text: 'Ahoj, ako ti môžem pomôcť?'
+        if(open){
+            fetch(`${nodejsApi}/text-to-speech`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data: 'Ahoj, ako ti môžem pomôcť?'
+                })
             })
-        })
-        .then(resp => resp.blob())
-        .then(data => {
-            setUrl(URL.createObjectURL(data))
-        })
-        .catch(err => {
-            setError('Chyba služby text-to-speech');
-        })
-    }, [])
+            .then(resp => resp.json())
+            .then(data => {
+                //setUrl(URL.createObjectURL(data))
+                dataToBase64StringAndPlayAudio(data);
+            })
+            .catch(err => {
+                setError('Chyba služby text-to-speech');
+            })
+        }
+    }, [open])
+    const play = (url) =>  {
+		return new Promise((resolve, reject) => {   // return a promise
+			var audio = new Audio();                     // create audio wo/ src
+			audio.preload = "auto";                      // intend to play through
+			audio.autoplay = true;                    // autoplay when loaded
+			audio.onerror = reject;                      // on error, reject
+			audio.onended = resolve;
+   
+			audio.src = url; // just for example
+		});
+    }
+    const dataToBase64StringAndPlayAudio = (data) => {
+        play("data:audio/wav;base64," + data.audioContent)
+    }
     
     useEffect(() => {
-        fetch(`${api}/text_to_speech`,{
+        fetch(`${nodejsApi}/text-to-speech`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                text: generateAnswer(answer, data, actions, socket, api, userID)
+                data: generateAnswer(answer, data, actions, socket, api, userID)
             })
         })
-            .then(resp => resp.blob())
+            .then(resp => resp.json())
             .then(data => {
                 setUrl(URL.createObjectURL(data));
             })

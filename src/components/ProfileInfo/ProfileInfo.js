@@ -5,8 +5,11 @@ export default function ProfileInfo({text, className, type, onUpdate}) {
     const [value, setValue] = useState(text);
 
     const onSaveButtonHandler = () => {
-        setEdit(false)
-        onUpdate(type, value)
+        setEdit(false);
+        onUpdate(type,value);
+        if(type === 'password'){
+            setValue('Nove heslo');
+        }
     }
 
     return (
