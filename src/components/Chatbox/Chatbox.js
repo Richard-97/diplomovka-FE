@@ -58,7 +58,8 @@ export default function Chatbox({icon, data, actions, socket, api, nodejsApi, us
         })
             .then(resp => resp.json())
             .then(data => {
-                setUrl(URL.createObjectURL(data));
+                dataToBase64StringAndPlayAudio(data);
+                //setUrl(URL.createObjectURL(data));
             })
             .catch(err => {
                 setError('Chyba služby text-to-speech');
