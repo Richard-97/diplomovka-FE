@@ -14,7 +14,7 @@
     "react-dom": "^16.8.6",
     "react-mic": "^12.4.1",
     "react-player": "^1.14.1",
-    "react-router-dom": "^5.0.0",
+    "react-router-dom": "^7.5.2",
     "react-scripts": "2.1.4",
     "react-switch": "^5.0.1",
     "react-webcam": "^4.0.0",
